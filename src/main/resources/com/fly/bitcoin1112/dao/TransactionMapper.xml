@@ -28,7 +28,7 @@
     delete from transaction1
     where transaction_id = #{transactionId,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="com.fly.bitcoin1112.po.Transaction">
+  <insert id="insert" parameterType="com.fly.bitcoin1112.po.Transaction" useGeneratedKeys="true" keyProperty="transactionId">
     insert into transaction1 (transaction_id, txid, txhash, 
       time, weight, status, size, 
       total_input, total_output, fees, 
