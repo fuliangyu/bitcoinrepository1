@@ -21,7 +21,7 @@
     delete from record1
     where record_id = #{recordId,jdbcType=BIGINT}
   </delete>
-  <insert id="insert" parameterType="com.fly.bitcoin1112.po.Record">
+  <insert id="insert" parameterType="com.fly.bitcoin1112.po.Record" useGeneratedKeys="true" keyProperty="recordId">
     insert into record1 (record_id, address, type, 
       amount, transaction_id)
     values (#{recordId,jdbcType=BIGINT}, #{address,jdbcType=VARCHAR}, #{type,jdbcType=BIT}, 

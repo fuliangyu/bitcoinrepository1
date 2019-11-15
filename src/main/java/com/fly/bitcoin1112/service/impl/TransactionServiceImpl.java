@@ -1,18 +1,26 @@
 package com.fly.bitcoin1112.service.impl;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.fly.bitcoin1112.client.BitcoinRest;
+import com.fly.bitcoin1112.dao.RecordMapper;
 import com.fly.bitcoin1112.dao.TransactionMapper;
+import com.fly.bitcoin1112.po.Record;
 import com.fly.bitcoin1112.po.Transaction;
 import com.fly.bitcoin1112.service.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class TransactionServiceImpl implements TransactionService{
 
     @Autowired
     private TransactionMapper transactionMapper;
+
+    @Autowired
+    private RecordServiceImpl recordService;
 
     @Autowired
     private BitcoinRest bitcoinRest;
@@ -30,5 +38,14 @@ public class TransactionServiceImpl implements TransactionService{
         transaction.setSize(transactionJson.getLong("size"));
 
         transactionMapper.insert(transaction);
+
+        Integer transactionId = transaction.getTransactionId();
+
+        //insert transaction record
+        List<JSONObject> vout1 = transactionJson.getJSONArray("vout").toJavaList(JSONObject.class);
+        for (JSONObject vout:vout1) {
+            recordService.syncRecord(vout,transactionId);
+        }
+
     }
 }
