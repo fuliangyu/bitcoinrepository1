@@ -33,7 +33,7 @@ public class TransactionServiceImpl implements TransactionService{
         transaction.setBlockId(blockId);
         transaction.setTxhash(transactionJson.getString("txid"));
         transaction.setTime(time);
-        transaction.setStatus(transactionJson.getBoolean(String.valueOf(0)));
+        transaction.setStatus(transactionJson.getBoolean("type"));
         transaction.setWeight(transactionJson.getInteger("weight"));
         transaction.setSize(transactionJson.getLong("size"));
 
@@ -47,5 +47,9 @@ public class TransactionServiceImpl implements TransactionService{
             recordService.syncRecord(vout,transactionId);
         }
 
+        List<JSONObject> vin1 = transactionJson.getJSONArray("vin").toJavaList(JSONObject.class);
+        for(JSONObject vin : vin1){
+            recordService.syncTxDetailVin(vin,transactionId);
+        }
     }
 }
