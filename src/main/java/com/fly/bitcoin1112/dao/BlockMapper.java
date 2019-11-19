@@ -21,4 +21,9 @@ public interface BlockMapper {
 
     Page<Block> search(Block block);
 
+    List<Block> selectRecent();
+
+    Page<Block> selectWithPage();
+
+    Block selectByBlockhash(String blockhash);
 }

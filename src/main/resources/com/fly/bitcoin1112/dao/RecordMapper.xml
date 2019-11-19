@@ -101,4 +101,11 @@
       </if>
     </where>
   </select>
+  <!--  custom-->
+  <select id="selectByTransactionId" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from record1
+    where transaction_id = #{transactionId}
+  </select>
 </mapper>

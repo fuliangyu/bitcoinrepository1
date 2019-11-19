@@ -3,6 +3,8 @@ package com.fly.bitcoin1112.dao;
 import com.fly.bitcoin1112.po.Record;
 import com.github.pagehelper.Page;
 
+import java.util.List;
+
 public interface RecordMapper {
     int deleteByPrimaryKey(Long recordId);
 
@@ -17,4 +19,6 @@ public interface RecordMapper {
     int updateByPrimaryKey(Record record);
 
     Page<Record> search(Record record);
+
+    List<Record> selectByTransactionId(Integer transactionId);
 }

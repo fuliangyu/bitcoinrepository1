@@ -26,7 +26,7 @@ public class TransactionServiceImpl implements TransactionService{
     private BitcoinRest bitcoinRest;
 
     @Override
-    public void syncTransaction(String txid,Integer blockId,Long time) {
+    public void syncTransaction(String txid,Integer blockId,Long time) throws Throwable {
         JSONObject transactionJson = bitcoinRest.getTransaction("txhash");
         Transaction transaction = new Transaction();
 

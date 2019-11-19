@@ -7,13 +7,21 @@ import com.fly.bitcoin1112.dao.TransactionMapper;
 import com.fly.bitcoin1112.po.Block;
 import com.fly.bitcoin1112.po.Transaction;
 import com.fly.bitcoin1112.service.BlockService;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class BlockServiceImpl implements BlockService{
+
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
+
     @Autowired
     private BlockMapper blockMapper;
 
@@ -24,7 +32,7 @@ public class BlockServiceImpl implements BlockService{
     private TransactionServiceImpl transactionService;
 
     @Override
-    public String syncBlock(String blockhash) {
+    public String syncBlock(String blockhash) throws Throwable {
         JSONObject blockJson = bitcoinRest.getBlockNoTxDetails(blockhash);
         Block block = new Block();
         block.setBlockhash(blockJson.getString("hash"));
@@ -48,10 +56,31 @@ public class BlockServiceImpl implements BlockService{
     }
 
     @Override
-    public void syncAllBlocks(String fromBlockhash) {
+    public void syncAllBlocks(String fromBlockhash) throws Throwable {
+        logger.info("Block synchronization start");
         String tempBlockhash = fromBlockhash;
         while(tempBlockhash !=null){
             tempBlockhash =syncBlock(tempBlockhash);
         }
+        logger.info("End of block synchronization");
+    }
+
+    @Override
+    public List<Block> getRecent() {
+        List<Block> blocks = blockMapper.selectRecent();
+        return blocks;
+    }
+
+    @Override
+    public Page<Block> getWithPage(Integer page) {
+        PageHelper.startPage(page, 20);
+        Page<Block> blocks = blockMapper.selectWithPage();
+        return blocks;
+    }
+
+    @Override
+    public Block getByBlockhash(String blockhash) {
+        Block block = blockMapper.selectByBlockhash(blockhash);
+        return block;
     }
 }
