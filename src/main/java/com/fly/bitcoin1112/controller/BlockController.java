@@ -2,9 +2,9 @@ package com.fly.bitcoin1112.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.fly.bitcoin1112.dao.BlockMapper;
+import com.fly.bitcoin1112.dto.PageDTO;
 import com.fly.bitcoin1112.po.Block;
 import com.fly.bitcoin1112.service.BlockService;
-import com.fly.bitcoin1112.service.impl.BlockServiceImpl;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @RestController
 @RequestMapping("/block")
@@ -62,8 +61,24 @@ public class BlockController {
     }
 
     @GetMapping("/getWithPage")
-    public List<JSONObject> getWithPage(@RequestParam(required = false, defaultValue = "1") Integer page){
-        return null;
+    public PageDTO<JSONObject> getWithPage(@RequestParam(required = false, defaultValue = "1") Integer page){
+        Page<Block> blocks = blockService.getWithPage(page);
+        List<JSONObject> blockJsons = blocks.stream().map(block -> {
+            JSONObject jsonblock = new JSONObject();
+            jsonblock.put("height",block.getHeight());
+            jsonblock.put("blockhash", block.getBlockhash());
+            jsonblock.put("time", block.getTime());
+            jsonblock.put("miner", block.getMiner());
+            jsonblock.put("size", block.getTxSize());
+            return jsonblock;
+        }).collect(Collectors.toList());
+        PageDTO<JSONObject> pagedto = new PageDTO<>();
+        pagedto.setList(blockJsons);
+        pagedto.setTotal(blocks.getTotal());
+        pagedto.setPageSize(blocks.getPageSize());
+        pagedto.setCurrentPage(blocks.getPageNum());
+
+        return pagedto;
     }
 
     @GetMapping("/getInfoByHash")
