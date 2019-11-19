@@ -4,7 +4,9 @@ import com.alibaba.fastjson.JSONObject;
 import com.fly.bitcoin1112.dao.BlockMapper;
 import com.fly.bitcoin1112.dto.PageDTO;
 import com.fly.bitcoin1112.po.Block;
+import com.fly.bitcoin1112.po.Transaction;
 import com.fly.bitcoin1112.service.BlockService;
+import com.fly.bitcoin1112.service.TransactionService;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -25,6 +27,9 @@ public class BlockController {
 
     @Autowired
     private BlockService blockService;
+
+    @Autowired
+    private TransactionService transactionService;
 
     @GetMapping("/selectByPrimaryKey")
     public Block SelectByPrimaryKey(Integer blockId){
@@ -83,7 +88,20 @@ public class BlockController {
 
     @GetMapping("/getInfoByHash")
     public JSONObject getInfoByHash(@RequestParam String blockhash){
-        return null;
+        JSONObject blockinfo = new JSONObject();
+        Block block = blockService.getByBlockhash(blockhash);
+        blockinfo.put("blockhash", block.getBlockhash());
+        blockinfo.put("time", block.getTime());
+        blockinfo.put("height", block.getHeight());
+        blockinfo.put("miner", block.getMiner());
+        blockinfo.put("txSize", block.getTxSize());
+        blockinfo.put("diffculty", block.getDifficulty());
+
+        List<Transaction> transactions = transactionService.getByBlockId(block.getBlockId());
+
+        blockinfo.put("transactions",null);
+
+        return blockinfo;
     }
 
     @GetMapping("/getInfoByHeight")

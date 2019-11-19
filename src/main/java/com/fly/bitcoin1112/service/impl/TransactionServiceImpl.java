@@ -52,4 +52,11 @@ public class TransactionServiceImpl implements TransactionService{
             recordService.syncTxDetailVin(vin,transactionId);
         }
     }
+
+    @Override
+    public List<Transaction> getByBlockId(Integer blockId) {
+        List<Transaction> transactions = transactionMapper.selectByBlockId(blockId);
+        return transactions;
+    }
+
 }

@@ -178,4 +178,28 @@
       </if>
     </where>
   </select>
+  <!--  custom-->
+  <select id="selectByBlockId" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from transaction1
+    where block_id = #{blockId}
+  </select>
+  <select id="selectByBlockIdWithPage" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from transaction1
+    where block_id = #{blockId}
+  </select>
+  <select id="selectByTxid" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from transaction1
+    where txid = #{txid}
+  </select>
+  <select id="selectTransactionByAddress" resultMap="BaseResultMap">
+    SELECT distinct(td.transaction_id) as transaction_id2 ,t.* FROM record1 as td left join transaction1 as t on td.transaction_id = t.transaction_id
+    where td.address = #{address}
+    order by time desc
+  </select>
 </mapper>
