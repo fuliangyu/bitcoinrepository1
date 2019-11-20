@@ -96,11 +96,7 @@ public class BlockController {
         blockinfo.put("miner", block.getMiner());
         blockinfo.put("txSize", block.getTxSize());
         blockinfo.put("diffculty", block.getDifficulty());
-
-        List<Transaction> transactions = transactionService.getByBlockId(block.getBlockId());
-
-        blockinfo.put("transactions",null);
-
+        
         return blockinfo;
     }
 

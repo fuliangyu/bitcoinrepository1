@@ -3,6 +3,7 @@ package com.fly.bitcoin1112.dao;
 import com.alibaba.fastjson.JSONObject;
 import com.fly.bitcoin1112.po.Block;
 import com.github.pagehelper.Page;
+import feign.Param;
 
 import java.util.List;
 
@@ -25,5 +26,5 @@ public interface BlockMapper {
 
     Page<Block> selectWithPage();
 
-    Block selectByBlockhash(String blockhash);
+    Block selectByBlockhash(@Param("blockhash") String blockhash);
 }

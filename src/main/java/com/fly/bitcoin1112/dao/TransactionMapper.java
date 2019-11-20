@@ -22,4 +22,6 @@ public interface TransactionMapper {
     Page<Transaction> search(Transaction transaction);
 
     List<Transaction> selectByBlockId(@Param("blockId") Integer blockId);
+
+    Page<Transaction> selectByBlockIdWithPage(@Param("blockId") Integer blockId);
 }

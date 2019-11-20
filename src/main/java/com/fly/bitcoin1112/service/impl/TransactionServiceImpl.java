@@ -3,11 +3,14 @@ package com.fly.bitcoin1112.service.impl;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.fly.bitcoin1112.client.BitcoinRest;
+import com.fly.bitcoin1112.constants.PageConfig;
 import com.fly.bitcoin1112.dao.RecordMapper;
 import com.fly.bitcoin1112.dao.TransactionMapper;
 import com.fly.bitcoin1112.po.Record;
 import com.fly.bitcoin1112.po.Transaction;
 import com.fly.bitcoin1112.service.TransactionService;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -56,6 +59,13 @@ public class TransactionServiceImpl implements TransactionService{
     @Override
     public List<Transaction> getByBlockId(Integer blockId) {
         List<Transaction> transactions = transactionMapper.selectByBlockId(blockId);
+        return transactions;
+    }
+
+    @Override
+    public Page<Transaction> getByBlockIdWithPage(Integer blockId, Integer page) {
+        PageHelper.startPage(page, PageConfig.PAGE_SIZE);
+        Page<Transaction> transactions = transactionMapper.selectByBlockIdWithPage(blockId);
         return transactions;
     }
 
